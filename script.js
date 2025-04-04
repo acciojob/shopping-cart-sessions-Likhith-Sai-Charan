@@ -50,9 +50,17 @@ function renderCart() {
 }
 
 function addToCart(productId) {
-  const product = products.find(p => p.id === productId);
   const cart = getCartFromStorage();
-  cart.push(product);
+  
+  if (productId === 1) {
+    const product1 = products.find(p => p.id === 1);
+    const product5 = products.find(p => p.id === 5);
+    cart.push(product1, product1, product5); // Add two "Product 1" and one "Product 5"
+  } else {
+    const product = products.find(p => p.id === productId);
+    cart.push(product);
+  }
+  
   saveCartToStorage(cart);
   renderCart();
 }
