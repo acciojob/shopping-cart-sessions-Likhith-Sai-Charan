@@ -14,6 +14,7 @@ const productList = document.getElementById("product-list");
 const cartList = document.getElementById("cart-list");
 const clearCartBtn = document.getElementById("clear-cart-btn");
 
+// Utility functions
 function getCartFromStorage() {
   const cart = sessionStorage.getItem("cart");
   return cart ? JSON.parse(cart) : [];
@@ -27,11 +28,14 @@ function saveCartToStorage(cart) {
 function renderProducts() {
   products.forEach((product) => {
     const li = document.createElement("li");
-    li.innerHTML = `${product.name} - $${product.price} <button class="add-to-cart-btn" data-id="${product.id}">Add to Cart</button>`;
+    li.innerHTML = `
+      ${product.name} - $${product.price}
+      <button class="add-to-cart-btn" data-id="${product.id}">Add to Cart</button>`;
     productList.appendChild(li);
   });
 
-	document.querySelectorAll(".add-to-cart-btn").forEach((button) => {
+  // Add event listeners for all Add to Cart buttons
+  document.querySelectorAll(".add-to-cart-btn").forEach((button) => {
     button.addEventListener("click", () => {
       const productId = parseInt(button.getAttribute("data-id"));
       addToCart(productId);
@@ -39,9 +43,9 @@ function renderProducts() {
   });
 }
 
-// Render cart list
+// Render cart items
 function renderCart() {
-	cartList.innerHTML = "";
+  cartList.innerHTML = "";
   const cart = getCartFromStorage();
   cart.forEach((item) => {
     const li = document.createElement("li");
@@ -50,37 +54,35 @@ function renderCart() {
   });
 }
 
-// Add item to cart
+// Add to cart
 function addToCart(productId) {
-	const product = products.find((p) => p.id === productId);
+  const product = products.find(p => p.id === productId);
   if (product) {
     const cart = getCartFromStorage();
-    cart.push(product);
+    cart.push(product); // allow duplicates
     saveCartToStorage(cart);
     renderCart();
   }
 }
 
-// Remove item from cart
+// Remove one instance of a product from cart (if implemented)
 function removeFromCart(productId) {
-	 let cart = getCartFromStorage();
-  
-  // Find index of the first matching item
+  let cart = getCartFromStorage();
   const index = cart.findIndex(item => item.id === productId);
-
   if (index !== -1) {
-    cart.splice(index, 1); // Remove one item at the found index
-    saveCartToStorage(cart); // Update sessionStorage
-    renderCart(); // Re-render the cart
+    cart.splice(index, 1);
+    saveCartToStorage(cart);
+    renderCart();
   }
 }
 
 // Clear cart
 function clearCart() {
-	sessionStorage.removeItem("cart");
+  sessionStorage.removeItem("cart");
   renderCart();
 }
 
+// Event listener for clear button
 clearCartBtn.addEventListener("click", clearCart);
 
 // Initial render
