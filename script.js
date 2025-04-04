@@ -51,12 +51,10 @@ function renderCart() {
 
 function addToCart(productId) {
   const product = products.find(p => p.id === productId);
-  if (product) {
-    const cart = getCartFromStorage();
-    cart.push(product);
-    saveCartToStorage(cart);
-    renderCart();
-  }
+  const cart = getCartFromStorage();
+  cart.push(product);
+  saveCartToStorage(cart);
+  renderCart();
 }
 
 function clearCart() {
